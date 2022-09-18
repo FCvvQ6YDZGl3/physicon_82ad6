@@ -8,11 +8,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CoursesModulesTree.Models;
 
 namespace CoursesModulesTree
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -23,6 +25,8 @@ namespace CoursesModulesTree
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string connectionString = "Data Source=DESKTOP-V2UKGVT;Initial Catalog=physicon;Integrated Security=True";
+            services.AddTransient<IModuleRepository, ModuleRepository>(provider => new ModuleRepository(connectionString));
             services.AddControllersWithViews();
         }
 
