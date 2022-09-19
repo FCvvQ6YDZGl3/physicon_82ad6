@@ -1,0 +1,14 @@
+﻿@model IEnumerable<CoursesModulesTree.Models.Module>;
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Ступень 1 - Вывести на страницу данные в древовидной форме.</h1>
+    @foreach (var item in Model)
+    {
+<p>@item.Id, @item.Title</p>
+    }
+
+
+</div>

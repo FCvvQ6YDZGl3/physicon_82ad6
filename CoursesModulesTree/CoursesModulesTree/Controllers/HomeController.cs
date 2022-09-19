@@ -13,9 +13,16 @@ namespace CoursesModulesTree.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private IModuleRepository ModuleRepository;
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IModuleRepository moduleRepository)
         {
             _logger = logger;
+            this.ModuleRepository = moduleRepository;
+
+        }
+
+        public IActionResult Tree()
+        {
+            return View(ModuleRepository.GetModules());
         }
 
         public IActionResult Index()
