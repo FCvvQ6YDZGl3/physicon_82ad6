@@ -59,3 +59,4 @@ C:\projects\physicon_82ad6\CoursesModulesTree\CoursesModulesTree\obj\Debug\net5.
 C:\projects\physicon_82ad6\CoursesModulesTree\CoursesModulesTree\obj\Debug\net5.0\CoursesModulesTree.pdb
 C:\projects\physicon_82ad6\CoursesModulesTree\CoursesModulesTree\obj\Debug\net5.0\CoursesModulesTree.genruntimeconfig.cache
 C:\projects\physicon_82ad6\CoursesModulesTree\CoursesModulesTree\obj\Debug\net5.0\Razor\Views\Home\Tree.cshtml.g.cs
+C:\projects\physicon_82ad6\CoursesModulesTree\CoursesModulesTree\obj\Debug\net5.0\CoursesModulesTree.csproj.AssemblyReference.cache

@@ -1,14 +1,30 @@
-﻿@model IEnumerable<CoursesModulesTree.Models.Module>;
+﻿@model ModuleTree;
 @{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
     <h1 class="display-4">Ступень 1 - Вывести на страницу данные в древовидной форме.</h1>
-    @foreach (var item in Model)
-    {
-<p>@item.Id, @item.Title</p>
+    @{
+        Queue<Module> queue = new Queue<Module>();
+        Dictionary<Module, byte> nodes = Model.adjacencyList.Keys.ToDictionary(x => x, x => (byte)0);
+
+        queue.Enqueue(Model.roots.FirstOrDefault());
+        List<Module> subNodes;
+        while (queue.Count != 0)
+        {
+            Module node = queue.Dequeue();
+            nodes[node] = 2;
+            subNodes = Model.adjacencyList[node];
+            foreach (Module item in subNodes)
+            {
+                if (nodes[item] == 0)
+                {
+                    queue.Enqueue(item);
+                    nodes[item] = 1;
+                }
+            }
+            <p>@node.Id, @node.Title, @node.num</p>
+        }
     }
-
-
 </div>

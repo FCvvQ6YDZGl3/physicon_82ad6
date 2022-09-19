@@ -22,7 +22,17 @@ namespace CoursesModulesTree.Controllers
 
         public IActionResult Tree()
         {
-            return View(ModuleRepository.GetModules());
+            
+            List<Module> modules = ModuleRepository.GetModules();
+            Dictionary<Module, List<Module>> adjacencyList = new Dictionary<Module,List<Module>>();
+            foreach (Module item in modules)
+            {
+                adjacencyList.Add(item, modules.Where(modules => modules.ParentId == item.Id).ToList());
+            }
+            ModuleTree moduleTree = new ModuleTree();
+            moduleTree.adjacencyList = adjacencyList;
+            moduleTree.roots = modules.Where(modules => modules.ParentId is null).ToHashSet();
+            return View(moduleTree);
         }
 
         public IActionResult Index()
