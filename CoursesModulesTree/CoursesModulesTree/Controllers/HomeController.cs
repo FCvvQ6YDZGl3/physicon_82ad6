@@ -12,27 +12,34 @@ namespace CoursesModulesTree.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private IModuleRepository ModuleRepository;
-        public HomeController(ILogger<HomeController> logger, IModuleRepository moduleRepository)
+        private IRepository Repository;
+        public HomeController(ILogger<HomeController> logger, IRepository moduleRepository)
         {
             _logger = logger;
-            this.ModuleRepository = moduleRepository;
+            this.Repository = moduleRepository;
 
         }
 
         public IActionResult Tree()
         {
             
-            List<Module> modules = ModuleRepository.GetModules();
+            List<Module> modules = Repository.GetModules();
             Dictionary<Module, List<Module>> adjacencyList = new Dictionary<Module,List<Module>>();
+
             foreach (Module item in modules)
             {
                 adjacencyList.Add(item, modules.Where(modules => modules.ParentId == item.Id).ToList());
             }
+
             ModuleTree moduleTree = new ModuleTree();
+
             moduleTree.adjacencyList = adjacencyList;
             moduleTree.roots = modules.Where(modules => modules.ParentId is null).ToHashSet();
-            return View(moduleTree);
+
+            Tree tree = new Tree();
+            tree.courses = Repository.GetCourses().ToHashSet();
+            tree.moduleTree = moduleTree;
+            return View(tree);
         }
 
         public IActionResult Index()

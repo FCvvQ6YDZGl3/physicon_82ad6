@@ -6,15 +6,16 @@ using System.Linq;
 
 namespace CoursesModulesTree.Models
 {
-    public interface IModuleRepository
+    public interface IRepository
     {
+        List<Course> GetCourses();
         List<Module> GetModules();
     }
 
-    public class ModuleRepository : IModuleRepository
+    public class Repository : IRepository
     {
         string connectionString = null;
-        public ModuleRepository(string conn)
+        public Repository(string conn)
         {
             connectionString = conn;
         }
@@ -24,6 +25,14 @@ namespace CoursesModulesTree.Models
             using (IDbConnection db = new SqlConnection(connectionString))
             {
                 return db.Query<Module>(sqlScript).ToList();
+            }
+        }
+        public List<Course> GetCourses()
+        {
+            string sqlScript = "select c.id, c.Title, c.[Subject], c.Grade, c.Genre from dbo.Courses c";
+            using (IDbConnection db = new SqlConnection(connectionString))
+            {
+                return db.Query<Course>(sqlScript).ToList();
             }
         }
     }

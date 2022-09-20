@@ -26,7 +26,7 @@ namespace CoursesModulesTree
         public void ConfigureServices(IServiceCollection services)
         {
             string connectionString = "Data Source=DESKTOP-V2UKGVT;Initial Catalog=physicon;Integrated Security=True";
-            services.AddTransient<IModuleRepository, ModuleRepository>(provider => new ModuleRepository(connectionString));
+            services.AddTransient<IRepository, Repository>(provider => new Repository(connectionString));
             services.AddControllersWithViews();
         }
 

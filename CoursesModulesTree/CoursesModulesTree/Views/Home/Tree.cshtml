@@ -1,30 +1,50 @@
-﻿@model ModuleTree;
+﻿//https://mb4.ru/programming/css/1145-ol-2-ol-html-css.html
+@model Tree;
 @{
     ViewData["Title"] = "Home Page";
 }
-
-<div class="text-center">
+<style>
+    .letter {
+        color: red; /* Цвет символа */
+        font-size: 200%; /* Размер шрифта */
+    }
+</style>
+<div>
     <h1 class="display-4">Ступень 1 - Вывести на страницу данные в древовидной форме.</h1>
     @{
-        Queue<Module> queue = new Queue<Module>();
-        Dictionary<Module, byte> nodes = Model.adjacencyList.Keys.ToDictionary(x => x, x => (byte)0);
-
-        queue.Enqueue(Model.roots.FirstOrDefault());
-        List<Module> subNodes;
-        while (queue.Count != 0)
+        ModuleTree moduleTree = Model.moduleTree;
+        foreach (Module root in moduleTree.roots)
         {
-            Module node = queue.Dequeue();
-            nodes[node] = 2;
-            subNodes = Model.adjacencyList[node];
-            foreach (Module item in subNodes)
+            Course course = Model.courses.Where(x => x.id == root.CourseId).FirstOrDefault();
+            <hr />
+            <h2>@course.Title</h2>
+            <hr />
+            Queue<Module> queue = new Queue<Module>();
+            Dictionary<Module, byte> nodes = moduleTree.adjacencyList.Keys.ToDictionary(x => x, x => (byte)0);
+
+            queue.Enqueue(root);
+
+            List<Module> subNodes;
+
+            while (queue.Count != 0)
             {
-                if (nodes[item] == 0)
+
+                Module node = queue.Dequeue();
+                nodes[node] = 2;
+
+                subNodes = moduleTree.adjacencyList[node];
+                foreach (Module item in subNodes)
                 {
-                    queue.Enqueue(item);
-                    nodes[item] = 1;
+                    if (nodes[item] == 0)
+                    {
+                        queue.Enqueue(item);
+                        nodes[item] = 1;
+                    }
+
                 }
+
+                <li><span class="letter">@node.num</span> @node.Title @node.Id</li>
             }
-            <p>@node.Id, @node.Title, @node.num</p>
         }
     }
 </div>
