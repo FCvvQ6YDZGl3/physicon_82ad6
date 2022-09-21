@@ -23,10 +23,13 @@ namespace CoursesModulesTree.Models
         {
             string sqlScript = @"select m.ParentId, m.Id, m.CourseId, m.Title, m.num from dbo.Modules m 
                             inner join dbo.Courses c on c.Id = m.CourseId 
-                                where c.[Subject] = @subject or @subject = ''";
+                                where 
+                                    (c.[Subject] = @subject or @subject is null)
+                                and (c.[Grade] = @grade or @grade is null)
+                                and (c.[Genre] = @genre or @genre is null)";
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                return db.Query<Module>(sqlScript, new {t.subject}).ToList();
+                return db.Query<Module>(sqlScript, new {t.subject, t.grade, t.genre}).ToList();
             }
         }
         public List<Course> GetCourses()

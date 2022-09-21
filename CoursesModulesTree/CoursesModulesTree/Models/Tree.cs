@@ -10,8 +10,8 @@ namespace CoursesModulesTree.Models
         public HashSet<Course> courses;
         public ModuleTree moduleTree;
 
-        public string subject;
-        public int grade;
-        public string genre;
+        public string subject { get; set; }
+        public int grade { get; set; }
+        public string genre { get; set; }
     }
 }

@@ -22,8 +22,10 @@ namespace CoursesModulesTree.Controllers
 
         public IActionResult Tree(Tree t)
         {
+            Tree tree;
+            tree = (t == null) ? new Tree() : t;
             
-            List<Module> modules = Repository.GetModules(t);
+            List<Module> modules = Repository.GetModules(tree);
             Dictionary<Module, List<Module>> adjacencyList = new Dictionary<Module,List<Module>>();
 
             foreach (Module item in modules)
@@ -36,7 +38,6 @@ namespace CoursesModulesTree.Controllers
             moduleTree.adjacencyList = adjacencyList;
             moduleTree.roots = modules.Where(modules => modules.ParentId is null).ToHashSet();
 
-            Tree tree = new Tree();
             tree.courses = Repository.GetCourses().ToHashSet();
             tree.moduleTree = moduleTree;
             return View(tree);
