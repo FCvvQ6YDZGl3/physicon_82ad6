@@ -1,5 +1,4 @@
-﻿https://mb4.ru/programming/css/1145-ol-2-ol-html-css.html
-@model Tree;
+﻿@model Tree;
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -28,52 +27,43 @@
             stack.Push(root);
 
             List<Module> subNodes;
-            Dictionary<Module, int> numberOfNodesPassed = new Dictionary<Module, int>();
+            moduleTree.ResetNumberOfSubNodesPassed();
 
-            int level;
             while (stack.Count != 0)
             {
 
                 Module node = stack.Pop();
                 nodes[node] = 2;
-                level = moduleTree.getLevel(node);
 
                 Module parent = moduleTree.getParent(node);
 
 
-                if (node.ParentId is not null
-                && numberOfNodesPassed.ContainsKey(parent)
-                && moduleTree.adjacencyList[parent].Count == numberOfNodesPassed[parent])
+                if (moduleTree.firstChild(node))
                 {
+                    @Html.Raw("<ol>")
+                }
 
-                        <span>ОТКРЫТИЕ</span>
-                        @Html.Raw("<ol>")
-                        }
-                        if (node.ParentId is not null
-                        && numberOfNodesPassed.ContainsKey(parent))
-                        {
-                        numberOfNodesPassed[parent] = --numberOfNodesPassed[parent];
-                        }
+                if (node.ParentId is not null)
+                {
+                    moduleTree.subNodePassed(node);
+                }
 
-                        <li>
-                            <span class="letter">@node.num</span> @node.Title @node.Id LEVEL @level
-                        </li>
+                <li>
+                    <span class="letter">@node.num</span> @node.Title @node.Id
+                </li>
 
-                        if (node.ParentId is not null
-                        && numberOfNodesPassed.ContainsKey(parent)
-                        && numberOfNodesPassed[parent] == 0)
-                        {
-
-                    <span>ЗАКРЫТИЕ</span>
+                if (moduleTree.lastChild(node))
+                {
                     @Html.Raw("</ol>")
-                    numberOfNodesPassed.Remove(parent);
+                    moduleTree.numberOfSubNodesPassed.Remove(parent);
                 }
 
                 subNodes = moduleTree.adjacencyList[node];
-                if (subNodes.Count != 0)
-                    numberOfNodesPassed.Add(node, subNodes.Count);
-                subNodes.Reverse();
 
+                if (subNodes.Count != 0)
+                    moduleTree.numberOfSubNodesPassed.Add(node, subNodes.Count);
+
+                subNodes.Reverse();
                 foreach (Module item in subNodes)
                 {
                     if (nodes[item] == 0)
