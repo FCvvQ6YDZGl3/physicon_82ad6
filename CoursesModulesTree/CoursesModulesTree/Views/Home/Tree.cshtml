@@ -1,12 +1,15 @@
-﻿//https://mb4.ru/programming/css/1145-ol-2-ol-html-css.html
+﻿https://mb4.ru/programming/css/1145-ol-2-ol-html-css.html
 @model Tree;
 @{
     ViewData["Title"] = "Home Page";
 }
 <style>
     .letter {
-        color: red; /* Цвет символа */
-        font-size: 200%; /* Размер шрифта */
+        color: red;
+        font-size: 200%;
+    }
+    ol {
+        list-style-type: none
     }
 </style>
 <div>
@@ -19,31 +22,66 @@
             <hr />
             <h2>@course.Title</h2>
             <hr />
-            Queue<Module> queue = new Queue<Module>();
+            Stack<Module> stack = new Stack<Module>();
             Dictionary<Module, byte> nodes = moduleTree.adjacencyList.Keys.ToDictionary(x => x, x => (byte)0);
 
-            queue.Enqueue(root);
+            stack.Push(root);
 
             List<Module> subNodes;
+            Dictionary<Module, int> numberOfNodesPassed = new Dictionary<Module, int>();
 
-            while (queue.Count != 0)
+            int level;
+            while (stack.Count != 0)
             {
 
-                Module node = queue.Dequeue();
+                Module node = stack.Pop();
                 nodes[node] = 2;
+                level = moduleTree.getLevel(node);
+
+                Module parent = moduleTree.getParent(node);
+
+
+                if (node.ParentId is not null
+                && numberOfNodesPassed.ContainsKey(parent)
+                && moduleTree.adjacencyList[parent].Count == numberOfNodesPassed[parent])
+                {
+
+                        <span>ОТКРЫТИЕ</span>
+                        @Html.Raw("<ol>")
+                        }
+                        if (node.ParentId is not null
+                        && numberOfNodesPassed.ContainsKey(parent))
+                        {
+                        numberOfNodesPassed[parent] = --numberOfNodesPassed[parent];
+                        }
+
+                        <li>
+                            <span class="letter">@node.num</span> @node.Title @node.Id LEVEL @level
+                        </li>
+
+                        if (node.ParentId is not null
+                        && numberOfNodesPassed.ContainsKey(parent)
+                        && numberOfNodesPassed[parent] == 0)
+                        {
+
+                    <span>ЗАКРЫТИЕ</span>
+                    @Html.Raw("</ol>")
+                    numberOfNodesPassed.Remove(parent);
+                }
 
                 subNodes = moduleTree.adjacencyList[node];
+                if (subNodes.Count != 0)
+                    numberOfNodesPassed.Add(node, subNodes.Count);
+                subNodes.Reverse();
+
                 foreach (Module item in subNodes)
                 {
                     if (nodes[item] == 0)
                     {
-                        queue.Enqueue(item);
+                        stack.Push(item);
                         nodes[item] = 1;
                     }
-
                 }
-
-                <li><span class="letter">@node.num</span> @node.Title @node.Id</li>
             }
         }
     }
