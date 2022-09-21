@@ -9,5 +9,9 @@ namespace CoursesModulesTree.Models
     {
         public HashSet<Course> courses;
         public ModuleTree moduleTree;
+
+        public string subject;
+        public int grade;
+        public string genre;
     }
 }

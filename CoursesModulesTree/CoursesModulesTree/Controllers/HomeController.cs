@@ -20,10 +20,10 @@ namespace CoursesModulesTree.Controllers
 
         }
 
-        public IActionResult Tree()
+        public IActionResult Tree(Tree t)
         {
             
-            List<Module> modules = Repository.GetModules();
+            List<Module> modules = Repository.GetModules(t);
             Dictionary<Module, List<Module>> adjacencyList = new Dictionary<Module,List<Module>>();
 
             foreach (Module item in modules)

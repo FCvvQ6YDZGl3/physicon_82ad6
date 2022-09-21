@@ -2,16 +2,72 @@
 @{
     ViewData["Title"] = "Home Page";
 }
+
+<link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" />
 <style>
     .letter {
         color: red;
         font-size: 200%;
     }
+
     ol {
         list-style-type: none
     }
 </style>
+
 <div>
+    <h1 class="display-4"> Ступень 2 - Добавить на страницу фильтры по свойствам курса - полям Subject, Grade, Genre.</h1>
+    <div class="panel-body">
+        <form class="form-row" asp-action="Tree" method="post">
+            <div class="form-group m-1 p-2">
+                <label asp-for="subject">Subject</label>
+                <select asp-for="subject">
+                    <option value="">Выберите subject</option>
+                    @{
+                        List<string> subjects = Model.courses.Select(x => x.Subject).Distinct().ToList();
+                        foreach (string item in subjects)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="form-group m-1 p-2">
+                <label asp-for="grade">Grade</label>
+                <select asp-for="grade">
+                    <option value="">Выберите grade</option>
+                    @{
+                        List<int> grades = Model.courses.Select(x => x.Grade).Distinct().ToList();
+                        foreach (int item in grades)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="form-group m-1 p-2">
+                <label asp-for="genre">Genre</label>
+                <select asp-for="genre">
+                    <option value="">Выберите genre</option>
+                    @{
+                        List<string> genres = Model.courses.Select(x => x.Genre).Distinct().ToList();
+                        foreach (string item in genres)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="text-center m-1 p-2">
+                <button class="btn btn-primary" type="submit">
+                    Применить
+                </button>
+            </div>
+        </form>
+    </div>
     <h1 class="display-4">Ступень 1 - Вывести на страницу данные в древовидной форме.</h1>
     @{
         ModuleTree moduleTree = Model.moduleTree;

@@ -9,7 +9,7 @@ namespace CoursesModulesTree.Models
     public interface IRepository
     {
         List<Course> GetCourses();
-        List<Module> GetModules();
+        List<Module> GetModules(Tree tree);
     }
 
     public class Repository : IRepository
@@ -19,12 +19,14 @@ namespace CoursesModulesTree.Models
         {
             connectionString = conn;
         }
-        public List<Module> GetModules()
+        public List<Module> GetModules(Tree t)
         {
-            string sqlScript = "select m.ParentId, m.Id, m.CourseId, m.Title, m.num from dbo.Modules m";
+            string sqlScript = @"select m.ParentId, m.Id, m.CourseId, m.Title, m.num from dbo.Modules m 
+                            inner join dbo.Courses c on c.Id = m.CourseId 
+                                where c.[Subject] = @subject or @subject = ''";
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                return db.Query<Module>(sqlScript).ToList();
+                return db.Query<Module>(sqlScript, new {t.subject}).ToList();
             }
         }
         public List<Course> GetCourses()
